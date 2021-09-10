@@ -1,11 +1,6 @@
 package hk.com.peoplesplace.fcmdemo;
 
-import android.app.NotificationManager;
-import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
-
-import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -17,6 +12,7 @@ import com.google.firebase.messaging.RemoteMessage;
  */
 public class FcmMessageService extends FirebaseMessagingService {
     public static String TAG = "tag_-----FcmMessagService:";
+    final int NOTIFY_ID = 2233;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -40,7 +36,8 @@ public class FcmMessageService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-            sendNotification(getBaseContext(),remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
+            FireModule fire = new FireModule();
+            fire.sendNotification(getBaseContext(),remoteMessage.getNotification().getTitle(),remoteMessage.getNotification().getBody());
         }
 
         // Also if you intend on generating your own notifications as a result of a received FCM
@@ -87,32 +84,5 @@ public class FcmMessageService extends FirebaseMessagingService {
     @Override
     public void onSendError(String s, Exception e) {
         super.onSendError(s, e);
-    }
-
-    private void sendNotification(Context iContext, String messageTitle, String messageBody) {
-        NotificationManager notificationManager = (NotificationManager) iContext.getSystemService(Context.NOTIFICATION_SERVICE);
-//        Intent intent = new Intent(this, MessageActivity.class); // 接收到通知后，点击通知，启动 MessageActivity
-
-//        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        long[] pattern = {500, 500, 500, 500, 500};
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "-1")
-                .setTicker(messageTitle)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("你有新信息")
-                .setAutoCancel(true)
-                .setContentText(messageBody)
-                .setWhen(System.currentTimeMillis())
-                .setVibrate(pattern)
-                .setChannelId(iContext.getPackageName())
-                .setLights(Color.BLUE, 1, 1);
-
-        builder.setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE);
-
-//        builder.setContentIntent(pendingIntent);
-//        builder.setFullScreenIntent(pendingIntent, true);//将一个Notification变成悬挂式Notification
-
-        if (notificationManager != null) {
-            notificationManager.notify(0, builder.build());
-        }
     }
 }
