@@ -1,4 +1,4 @@
-package hk.com.peoplesplace.fcmdemo;
+package com.fancy.fcm;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -7,35 +7,41 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class FireModule {
-    final String TAG = "FirePush";
-    final int NOTIFY_ID = 2233;
+    final static String TAG = "FirePush";
+    final static int NOTIFY_ID = 2233;
 
-    public void getToken(Context iContext){
+    public static void getToken(Context iContext){
         //获取推送Token
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                        return;
-                    }
-                    // Get new FCM registration token
-                    String token = task.getResult();
+        try {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+                        // Get new FCM registration token
+                        String token = task.getResult();
 
-                    // Log and toast
-                    Log.d(TAG, token);
-                    Toast.makeText(iContext,"获取Token：" + token, Toast.LENGTH_SHORT).show();
-                });
+                        // Log and toast
+                        Log.d(TAG, token);
+                        Toast.makeText(iContext,"获取Token：" + token, Toast.LENGTH_SHORT).show();
+                    });
+        }catch (Exception ex){
+            Log.e(TAG, "Fetching FCM registration token failed", ex);
+        }
     }
 
-    public void sendNotification(Context iContext,String messageTitle, String messageBody) {
+    public static void sendNotification(Context iContext,String messageTitle, String messageBody) {
         //        Intent intent = new Intent(this, MessageActivity.class); // 接收到通知后，点击通知，启动 MessageActivity
         //        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification = null;
