@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.fancy.fcm.FireModule;
+import com.fancy.fcm.FirePush;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,8 +23,9 @@ public class MainActivity extends AppCompatActivity {
         mHandler = new Handler(Looper.myLooper());
 
 
-        FireModule.getToken(mContext);
+//        FireModule.getToken(mContext);
         //测试通知信息
-        findViewById(R.id.sendMsg).setOnClickListener(v -> FireModule.sendNotification(mContext,"测试信息","你好"));
+//        findViewById(R.id.sendMsg).setOnClickListener(v -> FireModule.sendNotification(mContext,"测试信息","你好"));
+        findViewById(R.id.sendMsg).setOnClickListener(v -> FirePush.getToken(mContext));
     }
 }

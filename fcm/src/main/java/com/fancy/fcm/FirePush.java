@@ -16,7 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-public class FireModule {
+public class FirePush {
     final static String TAG = "FirePush";
     final static int NOTIFY_ID = 2233;
 
